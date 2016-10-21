@@ -16,6 +16,7 @@ GLfloat gfPosX = 0.0;
 GLfloat gfDeltaX = .03;
 float VELOCIDADE_SKATE = 1.1;
 float BRACO_VEL = 1.5;
+float skyRotate = 0.0;
 float angle=0.0,deltaAngle = 0.0,ratio;
 float x=0.0f,y=1.75f,z=5.0f;
 float lx=0.0f,ly=0.0f,lz=-1.0f;
@@ -27,7 +28,7 @@ GLUquadricObj *quadratic;
 GLUquadricObj *quadratic2;
 int frame,time,timebase=0;
 char s[30];
-GLfloat alpha = 0.0;
+GLfloat alpha = 360;
 GLfloat alpha2 = 360.0;
 GLfloat giraL = 360.0;
 GLfloat giraR = 0.0;
@@ -53,8 +54,9 @@ GLfloat TALK_SWING=0.0f;
 GLfloat MAX_TALK_SWING=5.0f;
 GLfloat DELTA_TALK_SWING=2.0f;
 
-GLint CHANGE_CAMERA = 1;
+GLfloat CHANGE_CAMERA = 0;
 GLuint id;
+int flag = 0;
 
 double cutplane[4]={1.0f,0.0f,0.0f,0.0f};
 double cutplane2[4]={0.0f,1.0f,0.0f,0.0f};
@@ -311,6 +313,88 @@ static void torus(int numc, int numt)
       glEnd();
    }
 }
+void skate2(){
+    int i;
+    glPushMatrix();
+	 gluDisk(quadratic2, 0.2f, 1.4, 40, 40);
+	
+	 float limiar = 0.0;
+	 glColor3f(1.0f, 0.4f, 0.0f);
+	 for(i =0;i < 40;i++){
+	 	glTranslatef(0,0,limiar+=0.0001);
+	 	gluDisk(quadratic2, 0.f, 1.4, 40, 40);
+	 
+	 }
+	 glColor3f(1.0f, 0.0f, 0.0f);
+	 glTranslatef(0,0,limiar);
+	 gluDisk(quadratic2, 0.2f, 1.4, 40, 40);
+	 glPopMatrix();
+	  glPushMatrix();
+       glColor3f(0.6f,0.5f,0.2f);
+       glPushMatrix();
+       glTranslatef(0.61,0,-0.103);
+       gluCylinder(quadratic,0.03f,0.06f,0.1f,20,3);
+       glTranslatef(-1.41,0,0);
+       gluCylinder(quadratic,0.03f,0.06f,0.1f,20,3);
+       glPopMatrix();
+		 //glScalef(1,1,1);
+		 glColor3f(1.0f,1.0f,0.f);
+    	glTranslatef(0,0,0);
+	 	glRotatef(90,1,0,0);	 
+    	glTranslatef(0.61,-0.15,-1.15);
+    	gluCylinder(quadratic,0.08f,0.1f,2.25f,20,3);
+     	glTranslatef(-1.41,0,0);
+    	gluCylinder(quadratic,0.08f,0.1f,2.25f,20,3);
+    
+    	glPushMatrix();
+	 	glColor3f(1.0f,0.0f,1.0f);
+	 	glTranslatef(0,0,0);
+	 	glScalef(0.7,0.7,0.7);
+	 	glRotatef(270,1,0,0);
+	  	glTranslatef(0,-0.11,0);
+	 //glTranslatef(5,2,0);
+	 	glPushMatrix();
+	 	glTranslatef(0,0,0);
+	 	if(!flag)
+			glRotatef(alpha-=VELOCIDADE_SKATE,0,1,0);
+		else glRotatef(alpha+=VELOCIDADE_SKATE,0,1,0);
+	 	drawHalfSphere(10,10,0.2);
+	 //glPopMatrix();
+	 	glPopMatrix();
+	 	
+	 	glTranslatef(2.01,0,0);
+	 	glPushMatrix();
+	 	glTranslatef(0,0,0);
+	 	if(!flag)
+	 		glRotatef(alpha-=VELOCIDADE_SKATE,0,1,0);
+	 	else glRotatef(alpha+=VELOCIDADE_SKATE,0,1,0);
+	 	drawHalfSphere(10,10,0.2);
+	 	glPopMatrix();
+	 	
+	 	glTranslatef(0,-3,0);
+	   glRotatef(180,1,0,0);
+	 
+	   glPushMatrix();
+	   glTranslatef(0,0,0);
+	   if(!flag)
+	   	glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
+	   else glRotatef(alpha2-=VELOCIDADE_SKATE,0,1,0);
+	   drawHalfSphere(10,10,0.2);
+	   glPopMatrix();
+	
+	   glTranslatef(-2.01,0,0);
+	   glPushMatrix();
+	   glTranslatef(0,0,0);
+	   if(!flag)
+	   	glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
+	   else glRotatef(alpha2-=VELOCIDADE_SKATE,0,1,0);
+	   drawHalfSphere(10,10,0.2);
+	   glPopMatrix();
+	 	
+	glPopMatrix();
+glPopMatrix();
+
+}
 void drawSkate(){
 
 	//glutSolidTorus(0.4, 0.1, 3,50);
@@ -381,13 +465,13 @@ void drawSkate(){
 	 glRotatef(180,1,0,0);
 	 
 	 glPushMatrix();
-	 glRotatef(alpha2-=VELOCIDADE_SKATE,0,1,0);
+	 glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
 	 drawHalfSphere(10,10,0.2);
 	 glPopMatrix();
 	
 	glTranslatef(5,0,0);
 	glPushMatrix();
-	glRotatef(alpha2-=VELOCIDADE_SKATE,0,1,0);
+	glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
 	 drawHalfSphere(10,10,0.2);
 	  glPopMatrix();
     //glDisable(GL_CLIP_PLANE0);
@@ -489,26 +573,17 @@ void orientMe(float ang) {
  lx = sin(ang);
  lz = -cos(ang);
  glLoadIdentity();
- gluLookAt(x, y, z,
+ gluLookAt(x, y+CHANGE_CAMERA, z,
        x + lx,y + ly,z + lz,
     0.0f,1.0f,0.0f);
 }
-void upCam(int i){
-	
-x = x + i*(lx)*0.1;
- z = z + i*(lz)*0.1;
- glLoadIdentity();
- gluLookAt(x, y+ly, z+lx,
-       x ,y,z ,
-    0.0f,1.0f,0.0f);
-	
-}
+
 
 void moveMeFlat(int i) {
  x = x + i*(lx)*0.1;
  z = z + i*(lz)*0.1;
  glLoadIdentity();
- gluLookAt(x, y, z,
+ gluLookAt(x, y+CHANGE_CAMERA, z,
        x + lx,y + ly,z + lz,
     0.0f,1.0f,0.0f);
 }
@@ -556,7 +631,7 @@ void renderBitmapString(float x, float y, void *font,char *string)
 void renderScene(void) {
  //glutTimerFunc(10000,Redesenha,12);
  
- printf("%d\n", deltaMove);
+ //printf("%d\n", deltaMove);
 	if (deltaMove){
 		moveMeFlat(deltaMove);
 	
@@ -576,6 +651,7 @@ void renderScene(void) {
  glPushMatrix();
  glTranslatef(0,-3,0);
  glRotatef(90,0,0,1);
+ glRotatef(skyRotate+=0.1,1,0,0);
  glEnable(GL_TEXTURE_2D);
   glColor3f(0.196078f, 0.6f, 0.8f);
  //glutSolidSphere(36.f,10,10);
@@ -598,7 +674,7 @@ void renderScene(void) {
 
 
   
-    if (passo4 >= 500) {
+    if (passo4 >= 300) {
         dir4 = dir4 == 0 ? 1 : 0;
         passo4 = 0;
     }
@@ -607,37 +683,46 @@ void renderScene(void) {
     //glutTimerFunc(10000,Redesenha,1);
     if (dir4 == 0){
       glTranslatef(gfPosX-0.0001,0,0);
-     // printf("%d\n",passo4);
+      
+      //printf("%d\n",passo4);
   }
      else{
         glTranslatef(0.0001+gfPosX,0,0);
+        
 	}
    //glTranslatef(10,0,0);
   glPushMatrix();
 	glColor3f(0.0f, 1.0f, 0.0f);
-	glTranslatef(0,1.7,0);
+	glTranslatef(0,1.0,0);
 	glScalef(0.5,0.5,0.5);
   
 	glRotatef(-90,1,0,0);
 	glRotatef(180,0,0,1);
 	glPushMatrix();
-		glTranslatef(0,0,0.6);
-		drawAndroid();
+	glTranslatef(0,0,0.1);
+	drawAndroid();
 	glPopMatrix();
  
-	glTranslatef(0,0,-7.6);
-	glRotatef(90,1,0,0);
-	glScalef(4,4,4);
+	//glTranslatef(0,0,-7.6);
+	glTranslatef(0,0,-1.7);
+	//glRotatef(90,1,0,0);
+	glScalef(1.4,0.6,1);
    
 	glColor3f(1.0f, 0.0f, 0.0f);
-	drawSkate();
+	//drawSkate();
+	skate2();
   glPopMatrix();
   glPopMatrix();
- glPopMatrix();
+ //glPopMatrix();
  glFlush();
  gfPosX += gfDeltaX;
 	if (gfPosX >= 20 || gfPosX <= -20.0) {
 		gfDeltaX = -gfDeltaX;
+		if(!flag)
+			flag = 1;
+		else flag = 0;
+		//alpha = alpha+360;
+      // alpha2 = -alpha2; 
 	}
  //glTranslatef(0,0,0);
  
@@ -672,10 +757,16 @@ void processNormalKeys(unsigned char key, int x, int y) {
  if (key == 27)
   exit(0);
   
-  if(key == 'q'){
-	 CHANGE_CAMERA = -CHANGE_CAMERA;
-	 
+  if(key == 'w'){
+  		CHANGE_CAMERA = CHANGE_CAMERA + 0.5; 
+	 	//if(CHANGE_CAMERA > 20)flag = 1;
 	}
+  else if(key = 's'){
+	CHANGE_CAMERA = CHANGE_CAMERA - 0.5;
+		//if(CHANGE_CAMERA < -10) flag =0;	
+	
+	}
+	printf("Ponto de visao:%f\n", CHANGE_CAMERA);
 }
 
 void pressKey(int key, int x, int y) {
@@ -685,6 +776,7 @@ void pressKey(int key, int x, int y) {
   case GLUT_KEY_RIGHT : deltaAngle = 0.01f;break;
   case GLUT_KEY_UP : deltaMove = 1;break;
   case GLUT_KEY_DOWN : deltaMove = -1;break;
+  
   
  }
 
@@ -722,7 +814,7 @@ void initWindow() {
  glutSpecialFunc(pressKey);
  glutSpecialUpFunc(releaseKey);
  glutDisplayFunc(renderScene);
- glutIdleFunc(idle);
+ glutIdleFunc(renderScene);
  glutReshapeFunc(changeSize);
  quadratic = gluNewQuadric();
  quadratic2 = gluNewQuadric();
