@@ -32,6 +32,6 @@ Inicialmente, o ponto de visão é definido como : 0.0, assim ao apertar 'w', o
 ponto de visão é incrementado, e ao apertar 's', o ponto é decrementado. A cada
 evento de teclado destas duas teclas, o ponto de visão atual é mostrado no terminal.
 *Obs: Pode acontecer de a câmera não ser atualizada imediatamente ao apertar 'w' ou 's', 
-  neste caso, basta pressionar algumas das teclas direcionais com a atualização ocorrer.
+  neste caso, basta pressionar algumas das teclas direcionais para a atualização ocorrer.
   
   No terminal, também é impresso a quantidade de quadros por segundo da aplicação.
