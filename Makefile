@@ -15,6 +15,6 @@
 all: flag
 
 flag: *.cpp
-	g++ snow.cpp bmp.cpp -o  main -lGL -lGLU -lglut
+	g++ snow.cpp bmp.cpp android.h  -o  main -lGL -lGLU -lglut
 	./main
    

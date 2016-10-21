@@ -2,71 +2,9 @@
 //http://www.it.hiof.no/~borres/j3d/JOGL/android/p-android.html
 //g++ snow.cpp -o  m -lGL -lGLU -lglut
 
-#include <math.h>
-#include <GL/glut.h>
-#include <stdio.h>
-#include <string.h>
+#include "android.h"
 //#include <cstdlib>
 //if you got error in exit() by compiler then does not incluede stdlib.h because //exit() is also defined in glut.h file.
-
-GLfloat v[8][3] = { {-1,-1,-1}, {1,-1,-1}, {1,1,-1}, {-1,1,-1},
-					{1,-1,1}, {-1,-1,1}, {-1,1,1}, {1,1,1}};
-
-GLfloat gfPosX = 0.0;
-GLfloat gfDeltaX = .03;
-float VELOCIDADE_SKATE = 1.1;
-float BRACO_VEL = 1.5;
-float skyRotate = 0.0;
-float angle=0.0,deltaAngle = 0.0,ratio;
-float x=0.0f,y=1.75f,z=5.0f;
-float lx=0.0f,ly=0.0f,lz=-1.0f;
-int deltaMove = 0,h,w;
-int font= 10;
-static GLint snowman_display_list;
-int bitmapHeight=13;
-GLUquadricObj *quadratic;
-GLUquadricObj *quadratic2;
-int frame,time,timebase=0;
-char s[30];
-GLfloat alpha = 360;
-GLfloat alpha2 = 360.0;
-GLfloat giraL = 360.0;
-GLfloat giraR = 0.0;
-GLfloat giraX = 360.0;
-
-GLfloat BODY_LENGTH=3.0f;
-GLfloat BODY_RADIUS=1.5f;
-GLfloat LIMB_LENGTH=1.7f;
-GLfloat LIMB_RADIUS=0.4f;
-GLfloat HORN_LENGTH=0.6f;
-GLfloat HORN_RADIUS=0.1f;
-    
-    // drawing precision
-GLfloat SLICES=30;
-GLfloat STACKS=30;    
-     
-    // animation    
-GLfloat ARM_SWING=0.0f;
-GLfloat DELTA_ARM_SWING=5.0f;
-GLfloat MAX_ARM_SWING=50.0f;
-    
-GLfloat TALK_SWING=0.0f;
-GLfloat MAX_TALK_SWING=5.0f;
-GLfloat DELTA_TALK_SWING=2.0f;
-
-GLfloat CHANGE_CAMERA = 0;
-GLuint id;
-int flag = 0;
-
-double cutplane[4]={1.0f,0.0f,0.0f,0.0f};
-double cutplane2[4]={0.0f,1.0f,0.0f,0.0f};
-GLint dir,dir2,dir3,dir4 = 0;
-GLint passo,passo2,passo3,passo4 = 0;
-void initWindow();
-void Redesenha(int);
-unsigned char *  loadBMP_custom(const char *, unsigned int&, unsigned int&);
-
-unsigned char *texture = NULL;
 
 
 void changeSize(int w1, int h1){
@@ -95,6 +33,40 @@ void changeSize(int w1, int h1){
     0.0f,1.0f,0.0f);
 
 }
+void setMaterial2(){
+
+	
+        //black plastic
+        float amb[]={0.0f, 0.0f, 0.0f, 1.0f};
+        float diff[]={0.01f, 0.01f, 0.01f, 1.0f};
+        float spec[]={0.50f, 0.50f, 0.50f, 1.0f };
+        float shine=32.0f;
+        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,amb);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,diff);
+        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,spec);
+        glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shine);
+    
+
+
+
+
+}
+
+void setMaterial(){
+
+
+
+	 float amb[]={0.0f, 0.0f, 0.0f, 1.0f};
+        float diff[]={0.01f, 0.01f, 0.01f, 1.0f};
+        float spec[]={0.50f, 0.50f, 0.50f, 1.0f };
+        float shine=32.0f;
+	 glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,amb);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,diff);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,spec);
+    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shine);
+
+}
+
  
  void drawHalfSphere(int scaley, int scalex, GLfloat r) {
    int i, j;
@@ -147,7 +119,8 @@ void drawAndroid(){
 	gluQuadricDrawStyle(quadratic2, GLU_FILL);
 	gluQuadricOrientation(quadratic2, GLU_OUTSIDE);
 	gluQuadricNormals(quadratic2, GLU_SMOOTH);
-	
+	setMaterial();
+
 	glPushMatrix();
     gluCylinder(quadratic2, BODY_RADIUS, BODY_RADIUS, BODY_LENGTH, SLICES, STACKS);
     gluDisk(quadratic2, 0.0f, BODY_RADIUS, SLICES, STACKS);
@@ -171,7 +144,7 @@ void drawAndroid(){
     glColor3f(0.0f, 1.0f, 0.0f);
     glTranslatef(0,0,0);
     glRotatef(270,0,1,0);
-    glTranslatef(0.01,0,0);
+    glTranslatef(0.001,0,0);
      glClipPlane(GL_CLIP_PLANE0,cutplane);
      //glColor3f(1.0f, 1.0f, 1.0f);
    
@@ -220,6 +193,7 @@ void drawAndroid(){
         
         
     //olhos
+    setMaterial2();
     glColor3f(0.0f, 0.0f, 0.0f);
      glPushMatrix();
 		glRotatef(-20.0f,1.0f,0.0f,0.0f);
@@ -511,7 +485,6 @@ void drawSnowMan() {
 }
 
 
-
 GLuint createDL() {
  GLuint snowManDL;
 
@@ -564,6 +537,35 @@ void initScene() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
    delete texture;
+   
+   glShadeModel(GL_SMOOTH);
+   
+	// Define a reflet�ncia do material
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, especularidade);
+	// Define a concentra��o do brilho
+	//glMateriali(GL_FRONT, GL_SHININESS, especMaterial);
+
+	// Ativa o uso da luz ambiente
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente1);
+
+	// Define os par�metros da luz de n�mero 0
+	glLightfv(GL_LIGHT1, GL_AMBIENT, luzAmbiente1);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, luzDifusa1);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, luzEspecular1);
+	glLightfv(GL_LIGHT1, GL_POSITION, posicaoLuz1);
+	
+	glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente2);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa2);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular2);
+	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz2);
+
+	// Habilita a defini��o da cor do material a partir da cor corrente
+	glEnable(GL_COLOR_MATERIAL);
+	//Habilita o uso de ilumina��o
+	glEnable(GL_LIGHTING);
+	// Habilita a luz de n�mero 0
+	glEnable(GL_LIGHT1);
+	glEnable(GL_NORMALIZE);
 
 }
 
@@ -660,9 +662,20 @@ void renderScene(void) {
   esfera = gluNewQuadric();
     gluQuadricTexture(esfera,1);
 
-
+    
     gluSphere(esfera,36,20,20);
  glDisable(GL_TEXTURE_2D);
+ glColor3f(1.0,0.7,0.1);
+ glMaterialfv(GL_FRONT, GL_SPECULAR, especularidade2);
+ glMateriali(GL_FRONT, GL_SHININESS, especMaterial2);
+
+	// Ativa o uso da luz ambiente
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente2);
+ glEnable(GL_LIGHT0);
+ 
+ glTranslatef(25,25,0); 
+ glutSolidSphere(4,30,30);
+ glDisable(GL_LIGHT0);
  glPopMatrix();
  glColor3f(0.9f, 0.9f, 0.9f);
  glBegin(GL_QUADS);
