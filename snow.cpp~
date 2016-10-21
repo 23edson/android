@@ -1,79 +1,60 @@
 
-//http://www.it.hiof.no/~borres/j3d/JOGL/android/p-android.html
-//g++ snow.cpp -o  m -lGL -lGLU -lglut
+/**
+*   Universidade Federal da Fronteira Sul
+*
+*   TRABALHO I
+*   Disciplina: Computação gráfica
+*   Professor: José Carlos Bins Filho
+*
+*
+* 	 Aluno : Edson Lemes da Silva
+*   
+*   
+*   As funções a seguir fazem a renderização do android andando de skate, 
+*   a textura utilizada para o céu está no arquivo 'sky.bmp', a leitura é feito
+*   dentro da funçao Inicializar().
+* 	 
+*
+*
+**/
 
 #include "android.h"
-//#include <cstdlib>
-//if you got error in exit() by compiler then does not incluede stdlib.h because //exit() is also defined in glut.h file.
-
-GLfloat v[8][3] = { {-1,-1,-1}, {1,-1,-1}, {1,1,-1}, {-1,1,-1},
-					{1,-1,1}, {-1,-1,1}, {-1,1,1}, {1,1,1}};
 
 
+/**
+ * @function MudarLuz
+ *
+ * 
+ * A função define a rotina para definir luz no material.
+ *
+ **/
 
+void MudarLuz(){
 
-void changeSize(int w1, int h1){
+	 float ambiente[]={0.0f, 0.0f, 0.0f, 1.0f};
+    float difusa[]={0.01f, 0.01f, 0.01f, 1.0f};
+    float especular[]={0.50f, 0.50f, 0.50f, 1.0f };
+    float spec=32.0f;
+	 
+	 glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,ambiente);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,difusa);
+    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,especular);
+    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,spec);
 
- // Prevent a divide by zero, when window is too short
- // (you cant make a window of zero width).
- if(h1 == 0)
-  h1 = 1;
+}
 
- w = w1;
- h = h1;
- ratio = 1.0f * w / h;
- // Reset the coordinate system before modifying
- glMatrixMode(GL_PROJECTION);
- glLoadIdentity();
+/**
+ * @function DesenhaMetadeEsfera
+ *
+ * @param int scaley - define escala de y;
+ * @param int scalex - define escala de x.
+ * @param GLfloat r  - define o raio r.
+ *
+ * A função renderiza metade da esfera, definindo duas cores .
+ * para a esfera desenhada.
+ **/ 
  
- // Set the viewport to be the entire window
-    glViewport(0, 0, w, h);
-
- // Set the clipping volume
- gluPerspective(45,ratio,0.1,1000);
- glMatrixMode(GL_MODELVIEW);
- glLoadIdentity();
- gluLookAt(x, y, z,
-       x + lx,y + ly,z + lz,
-    0.0f,1.0f,0.0f);
-
-}
-void setMaterial2(){
-
-	
-        //black plastic
-        float amb[]={0.0f, 0.0f, 0.0f, 1.0f};
-        float diff[]={0.01f, 0.01f, 0.01f, 1.0f};
-        float spec[]={0.50f, 0.50f, 0.50f, 1.0f };
-        float shine=32.0f;
-        glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,amb);
-        glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,diff);
-        glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,spec);
-        glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shine);
-    
-
-
-
-
-}
-
-void setMaterial(){
-
-
-
-	 float amb[]={0.0f, 0.0f, 0.0f, 1.0f};
-        float diff[]={0.01f, 0.01f, 0.01f, 1.0f};
-        float spec[]={0.50f, 0.50f, 0.50f, 1.0f };
-        float shine=32.0f;
-	 glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,amb);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,diff);
-    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,spec);
-    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shine);
-
-}
-
- 
- void drawHalfSphere(int scaley, int scalex, GLfloat r) {
+ void DesenhaMetadeEsfera(int scaley, int scalex, GLfloat r) {
    int i, j;
    GLfloat v[scalex*scaley][3];
  
@@ -105,172 +86,172 @@ void setMaterial(){
      }
    glEnd();
  }
-void drawpart(float swing){
+ 
+/**
+ * @function DesenhaMembro
+ *
+ * Auxilia na renderização do Android para desenhar os braços e pernas. .
+ * 
+ **/ 
+void DesenhaMembro(){
 	glPushMatrix();
-    glRotatef(swing,1.0f,0.0f,0.0f);
-    gluSphere(quadratic2, LIMB_RADIUS, SLICES, STACKS);
-    glPopMatrix();
-    glPushMatrix();
-    glRotatef(180.0f+swing,1.0f,0.0f,0.0f);
-    gluCylinder(quadratic2, LIMB_RADIUS, LIMB_RADIUS, LIMB_LENGTH, SLICES, STACKS);
-    glTranslated(0.0f, 0.0f, LIMB_LENGTH);
-    gluSphere(quadratic2, LIMB_RADIUS, SLICES, STACKS);       
-    glPopMatrix();
+   glRotatef(0,1.0f,0.0f,0.0f);
+   gluSphere(quadratic2, RAIO_MEMBROS, 15, 15);
+   glPopMatrix();
+   glPushMatrix();
+   glRotatef(180.0f,1.0f,0.0f,0.0f);
+   gluCylinder(quadratic2, RAIO_MEMBROS, RAIO_MEMBROS, TAMANHO_MEMBROS, 15, 15);
+   glTranslated(0.0f, 0.0f, TAMANHO_MEMBROS);
+   gluSphere(quadratic2, RAIO_MEMBROS, 15, 15);       
+   glPopMatrix();
 
 	
 }
 
-void drawAndroid(){
+
+/**
+ * @function Android
+ * 
+ * 
+ * A função renderiza o boneco Android, também já simula o movimento
+ * dos braços e das antenas. A iluminação do material também é realizada
+ * na rotina. Os objetos utilizados para desenhar o boneco, são implementados
+ * no opengl, tais como: Disco, esfera e cilíndro. O corpo do Android é representado 
+ * por um cilindro "tampados" com dois discos em seus extremos, a cabeça é representada
+ * por uma semi-esfera(é desenhada a esfera, então é cortada ao meio). As antenas são 
+ * cilindros no alto da cabeça, os olhos são esferas pretas. E os membros do Android,
+ * são cilindros "tampados" com das esferas nos seus extremos.
+ *
+ **/ 
+
+void Android(){
+	
+	//Define opcoes para o desenho
 	gluQuadricDrawStyle(quadratic2, GLU_FILL);
 	gluQuadricOrientation(quadratic2, GLU_OUTSIDE);
 	gluQuadricNormals(quadratic2, GLU_SMOOTH);
-	setMaterial();
-
+	
+	//luz do objeto
+	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,luzAmbiente1);
+   glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,luzDifusa1);
+   glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,luzEspecular2);
+   glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,90.0);
+	
+   //Desenha o Corpo do Android
 	glPushMatrix();
-    gluCylinder(quadratic2, BODY_RADIUS, BODY_RADIUS, BODY_LENGTH, SLICES, STACKS);
-    gluDisk(quadratic2, 0.0f, BODY_RADIUS, SLICES, STACKS);
-    glTranslatef(0.0f, 0.0f, BODY_LENGTH);
-    gluDisk(quadratic2, 0.0f, BODY_RADIUS, SLICES, STACKS);
+   gluCylinder(quadratic2, RAIO_CORPO, RAIO_CORPO, TAMANHO_CORPO, 15, 15);
+   gluDisk(quadratic2, 0.0f, RAIO_CORPO, 15, 15);
+   glTranslatef(0.0f, 0.0f, TAMANHO_CORPO);
+   gluDisk(quadratic2, 0.0f, RAIO_CORPO, 15, 15);
     
-        // draw head top 
-        // talk
-        glColor3f(1.0f, 1.0f, 1.0f);
-    glRotatef(TALK_SWING, 1.0f, 0.0f, 0.0f);
-    glTranslatef(0.0f, 0.0f, 0.07f+0.05f*TALK_SWING);
-    gluDisk(quadratic2, 0.0f, BODY_RADIUS, SLICES, STACKS);
-    //glPushMatrix();
-    //glTranslatef(0.0f, 0.0f, 0.2);
-    //glRotatef(-280, 1.0f, 0.0,0.0);
-    //glRotatef(8, 1.0f, 0.0,0.0);
-    //drawHalfSphere(SLICES,STACKS,BODY_RADIUS);
-    
-    //double[] 
-    glPushMatrix();
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glTranslatef(0,0,0);
-    glRotatef(270,0,1,0);
-    glTranslatef(0.001,0,0);
-     glClipPlane(GL_CLIP_PLANE0,cutplane);
-     //glColor3f(1.0f, 1.0f, 1.0f);
-   
-    glEnable(GL_CLIP_PLANE0);
-    //glTranslatef(0.0f, 0.0f, 0.96);
-    //glRotatef(180,1,0,0);
-    
-    glutSolidSphere( BODY_RADIUS, SLICES, STACKS);
-    glDisable(GL_CLIP_PLANE0);
-    glPopMatrix();
-    
-    //chifres
-       glColor3f(0.0f, 1.0f, 0.0f);
-    glPushMatrix();
-		glRotatef(10.0f,1.0f,0.0f,0.0f);
-        glRotatef(30.0f,0.0f,1.0f,1.0f);
-        glTranslatef(0.0f, 0.0f, BODY_RADIUS-0.1f);
-        if (passo3 >= 20) {
-        dir3 = dir3 == 0 ? 1 : 0;
-        passo3 = 0;
-    }
-    passo3++;
-      //  glPushMatrix();
-        glPushMatrix();
-    if (dir3 == 0)
-		glRotatef(giraX-=BRACO_VEL,1,0,0);
-      //glTranslatef(passo-0.01,0,0);
-     else
-        glRotatef(giraX+=BRACO_VEL,1,0,0);
-        gluCylinder(quadratic2, HORN_RADIUS, HORN_RADIUS, HORN_LENGTH, SLICES, STACKS);
-        glPopMatrix();
-    glPopMatrix();
-    glPushMatrix();
-        glRotatef(10.0f,1.0f,0.0f,0.0f);
-        glRotatef(-30.0f,0.0f,1.0f,1.0f);
-        glTranslatef(0.0f, 0.0f, BODY_RADIUS-0.1f);
-        glPushMatrix();
-        if (dir3 == 0)
-		glRotatef(giraX-=BRACO_VEL,1,0,0);
-      //glTranslatef(passo-0.01,0,0);
-     else
-        glRotatef(giraX+=BRACO_VEL,1,0,0);
-        gluCylinder(quadratic2, HORN_RADIUS, HORN_RADIUS, HORN_LENGTH, SLICES, STACKS);
-        glPopMatrix();
-        glPopMatrix(); 
-        
-        
-    //olhos
-    setMaterial2();
-    glColor3f(0.0f, 0.0f, 0.0f);
-     glPushMatrix();
-		glRotatef(-20.0f,1.0f,0.0f,0.0f);
-		glRotatef(70.0f,0.0f,1.0f,1.0f);
-		glTranslated(0.0f, 0.4f, BODY_RADIUS -0.89f*LIMB_RADIUS);
-		gluSphere(quadratic2, LIMB_RADIUS, SLICES, STACKS);
-     glPopMatrix();
-     glPushMatrix();
-        glRotatef(-20.0f,1.0f,0.0f,0.0f);
-        glRotatef(-70.0f,0.0f,1.0f,1.0f);
-        glTranslated(0.0f, 0.2f, BODY_RADIUS -0.85f*LIMB_RADIUS);
-        gluSphere(quadratic2, LIMB_RADIUS, SLICES, STACKS);
-        glPopMatrix();
-       //glPopMatrix();     
-     glPopMatrix()  ;
+   glColor3f(1.0f, 1.0f, 1.0f);
+   glRotatef(0., 1.0f, 0.0f, 0.0f);
+   glTranslatef(0.0f, 0.0f, 0.07f+0.05f);
+   gluDisk(quadratic2, 0.0f, RAIO_CORPO, 15, 15);
 
-    //glPopMatrix(); 
-    
-    //Braços
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glPushMatrix();
-    glTranslatef(BODY_RADIUS+LIMB_RADIUS+0.1f, 0.0f, BODY_LENGTH-LIMB_RADIUS);
-    if (passo >= 100) {
-        dir = dir == 0 ? 1 : 0;
-        passo = 0;
-    }
-    passo++;
-    glPushMatrix();
-    if (dir == 0)
-		glRotatef(giraL-=BRACO_VEL,0,1,0);
-      //glTranslatef(passo-0.01,0,0);
-     else
-        glRotatef(giraL+=BRACO_VEL,0,1,0);
-        //glTranslatef(0.1-passo-0.01,0,0);
-   // glPushMatrix();
-    //if(gira < 180) gira= 360;
-    //glRotatef(gira-=BRACO_VEL,0,1,0);
-    drawpart(-ARM_SWING);
-    glPopMatrix();
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(-(BODY_RADIUS+LIMB_RADIUS+0.1f), 0.0f, BODY_LENGTH-LIMB_RADIUS);
-    if (passo2 >= 70) {
-        dir2 = dir2 == 0 ? 1 : 0;
-        passo2 = 0;
-    }
-    passo2++;
-    glPushMatrix();
-    if (dir2 == 0)
-		glRotatef(giraR+=BRACO_VEL,0,1,0);
-      //glTranslatef(passo-0.01,0,0);
-     else
-        glRotatef(giraR-=BRACO_VEL,0,1,0);
-    drawpart(ARM_SWING);
-    glPopMatrix();
+   //Desenha a cabeca do Android, contorna ao meio a esfera renderizada
+   glPushMatrix();
+   glColor3f(0.0f, 1.0f, 0.0f);
+   glTranslatef(0,0,0);
+   glRotatef(270,0,1,0);
+   glTranslatef(0.001,0,0);
+   glClipPlane(GL_CLIP_PLANE0,planoX);
+   glEnable(GL_CLIP_PLANE0);
+   glutSolidSphere( RAIO_CORPO, 15, 15);
+   glDisable(GL_CLIP_PLANE0);
    glPopMatrix();
    
-   //Pernas
+   //Desenha as antenas e simula o movimento delas
+   glColor3f(0.0f, 1.0f, 0.0f);
    glPushMatrix();
-   glTranslatef(BODY_RADIUS-LIMB_RADIUS*2.0f, 0.0f, 0.2f);
-   drawpart(ARM_SWING);
+   glRotatef(10.0f,1.0f,0.0f,0.0f);
+   glRotatef(30.0f,0.0f,1.0f,1.0f);
+   glTranslatef(0.0f, 0.0f, RAIO_CORPO-0.1f);
+   if (passo3 >= 20) {
+     dir3 = dir3 == 0 ? 1 : 0;
+     passo3 = 0;
+   }
+   passo3++;
+   glPushMatrix();
+   if (dir3 == 0)glRotatef(giraX-=BRACO_VEL,1,0,0);
+   else glRotatef(giraX+=BRACO_VEL,1,0,0);
+   gluCylinder(quadratic2, RAIO_ANTENA, RAIO_ANTENA, TAMANHO_ANTENA, 15, 15);
+   glPopMatrix();
+   glPopMatrix();
+    
+   glPushMatrix();
+   glRotatef(10.0f,1.0f,0.0f,0.0f);
+   glRotatef(-30.0f,0.0f,1.0f,1.0f);
+   glTranslatef(0.0f, 0.0f, RAIO_CORPO-0.1f);
+   glPushMatrix();
+   if (dir3 == 0)glRotatef(giraX-=BRACO_VEL,1,0,0);
+   else glRotatef(giraX+=BRACO_VEL,1,0,0);
+   gluCylinder(quadratic2, RAIO_ANTENA, RAIO_ANTENA, TAMANHO_ANTENA, 15, 15);
+   glPopMatrix();
+   glPopMatrix(); 
+        
+   //Desenha os olhos
+   glColor3f(0.0f, 0.0f, 0.0f);
+   glPushMatrix();
+   glRotatef(-20.0f,1.0f,0.0f,0.0f);
+   glRotatef(70.0f,0.0f,1.0f,1.0f);
+   glTranslated(0.0f, 0.4f, RAIO_CORPO -0.89f*RAIO_MEMBROS);
+   gluSphere(quadratic2, 0.39, 15, 15);
+   glPopMatrix();
+   
+   glPushMatrix();
+   glRotatef(-20.0f,1.0f,0.0f,0.0f);
+   glRotatef(-70.0f,0.0f,1.0f,1.0f);
+   glTranslated(0.0f, 0.2f, RAIO_CORPO -0.85f*RAIO_MEMBROS);
+   gluSphere(quadratic2, 0.39, 15, 15);
+   glPopMatrix();
+   glPopMatrix()  ;
+
+   //Desenha os Braços e simula o movimento
+   glColor3f(0.0f, 1.0f, 0.0f);
+   glPushMatrix();
+   glTranslatef(RAIO_CORPO +RAIO_MEMBROS+0.1f, 0.0f, TAMANHO_CORPO-RAIO_MEMBROS);
+   if (passo >= 100) {
+   	dir = dir == 0 ? 1 : 0;
+   	passo = 0;
+   }
+   passo++;
+   glPushMatrix();
+   if (dir == 0)glRotatef(giraL-=BRACO_VEL,0,1,0);
+   else glRotatef(giraL+=BRACO_VEL,0,1,0);
+   DesenhaMembro();
+   glPopMatrix();
+   glPopMatrix();
+   glPushMatrix();
+   glTranslatef(-(RAIO_CORPO+RAIO_MEMBROS+0.1f), 0.0f, TAMANHO_CORPO-RAIO_MEMBROS);
+   if (passo2 >= 70) {
+   	dir2 = dir2 == 0 ? 1 : 0;
+      passo2 = 0;
+  	}
+   passo2++;
+   glPushMatrix();
+   if (dir2 == 0)glRotatef(giraR+=BRACO_VEL,0,1,0);
+   else glRotatef(giraR-=BRACO_VEL,0,1,0);
+   DesenhaMembro();
+   glPopMatrix();
+   glPopMatrix();
+   
+   //Desenha as Pernas do Android
+   glPushMatrix();
+   glTranslatef(RAIO_CORPO-RAIO_MEMBROS*2.0f, 0.0f, 0.2f);
+   DesenhaMembro();
         
    glPopMatrix();
    glPushMatrix();
-   glTranslatef(-(BODY_RADIUS-LIMB_RADIUS*2.0f), 0.0f, 0.2f);
-   drawpart(-ARM_SWING);       
+   glTranslatef(-(RAIO_CORPO-RAIO_MEMBROS*2.0f), 0.0f, 0.2f);
+   DesenhaMembro();       
    glPopMatrix();
 
 
 	
 }
-static void torus(int numc, int numt)
+//funcao para desenhar metade de torus, (não usada)
+/*static void torus(int numc, int numt)
 {
    int i, j, k;
    double s, t, x, y, z, twopi;
@@ -291,10 +272,26 @@ static void torus(int numc, int numt)
       }
       glEnd();
    }
-}
-void skate2(){
+}*/
+
+
+/**
+ * @function Skate
+ * 
+ *
+ * A função é responsável pela renderização do Skate, utilizando-se 
+ * os objetos definitos no opengl, como : Disco, cilíndro. E também a função
+ * que renderiza metade de uma esfera (para as rodas). A prancha do Skate é renderizada
+ * através de vários discos desenhados com deslocamento de 0.0001 cada disco. A base do eixo
+ * e o eixo é representado por cilindros, e por último as rodas são simulados por metade de 
+ * esferas já aplicando as rotações e também a luz em todo o Skate. 
+ **/ 
+void Skate(){
+	 MudarLuz();
     int i;
     glPushMatrix();
+    
+    //Desenha a prancha do Skate
 	 gluDisk(quadratic2, 0.2f, 1.4, 40, 40);
 	
 	 float limiar = 0.0;
@@ -308,226 +305,273 @@ void skate2(){
 	 glTranslatef(0,0,limiar);
 	 gluDisk(quadratic2, 0.2f, 1.4, 40, 40);
 	 glPopMatrix();
-	  glPushMatrix();
-       glColor3f(0.6f,0.5f,0.2f);
-       glPushMatrix();
-       glTranslatef(0.61,0,-0.103);
-       gluCylinder(quadratic,0.03f,0.06f,0.1f,20,3);
-       glTranslatef(-1.41,0,0);
-       gluCylinder(quadratic,0.03f,0.06f,0.1f,20,3);
-       glPopMatrix();
-		 //glScalef(1,1,1);
-		 glColor3f(1.0f,1.0f,0.f);
-    	glTranslatef(0,0,0);
-	 	glRotatef(90,1,0,0);	 
-    	glTranslatef(0.61,-0.15,-1.15);
-    	gluCylinder(quadratic,0.08f,0.1f,2.25f,20,3);
-     	glTranslatef(-1.41,0,0);
-    	gluCylinder(quadratic,0.08f,0.1f,2.25f,20,3);
-    
-    	glPushMatrix();
-	 	glColor3f(1.0f,0.0f,1.0f);
-	 	glTranslatef(0,0,0);
-	 	glScalef(0.7,0.7,0.7);
-	 	glRotatef(270,1,0,0);
-	  	glTranslatef(0,-0.11,0);
-	 //glTranslatef(5,2,0);
-	 	glPushMatrix();
-	 	glTranslatef(0,0,0);
-	 	if(!flag)
-			glRotatef(alpha-=VELOCIDADE_SKATE,0,1,0);
-		else glRotatef(alpha+=VELOCIDADE_SKATE,0,1,0);
-	 	drawHalfSphere(10,10,0.2);
-	 //glPopMatrix();
-	 	glPopMatrix();
-	 	
-	 	glTranslatef(2.01,0,0);
-	 	glPushMatrix();
-	 	glTranslatef(0,0,0);
-	 	if(!flag)
-	 		glRotatef(alpha-=VELOCIDADE_SKATE,0,1,0);
-	 	else glRotatef(alpha+=VELOCIDADE_SKATE,0,1,0);
-	 	drawHalfSphere(10,10,0.2);
-	 	glPopMatrix();
-	 	
-	 	glTranslatef(0,-3,0);
-	   glRotatef(180,1,0,0);
 	 
-	   glPushMatrix();
-	   glTranslatef(0,0,0);
-	   if(!flag)
-	   	glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
-	   else glRotatef(alpha2-=VELOCIDADE_SKATE,0,1,0);
-	   drawHalfSphere(10,10,0.2);
-	   glPopMatrix();
-	
-	   glTranslatef(-2.01,0,0);
-	   glPushMatrix();
-	   glTranslatef(0,0,0);
-	   if(!flag)
-	   	glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
-	   else glRotatef(alpha2-=VELOCIDADE_SKATE,0,1,0);
-	   drawHalfSphere(10,10,0.2);
-	   glPopMatrix();
-	 	
-	glPopMatrix();
-glPopMatrix();
-
-}
-void drawSkate(){
-
-	//glutSolidTorus(0.4, 0.1, 3,50);
-	glPushMatrix();
-	glTranslatef(0,0,0);
-	glScalef(7,0.8,1.7);
-	
-	glTranslatef(0,2,0);
-//glutSolidCube(0.1);
-
-	//glTranslatef(0,0,0);
-	//glScalef(0.2,0.2,0.2);
-	glScalef(0.1,0.1,0.1);
-	glRotatef(90.0,0.0,1.0,0.0);
-	//glScalef(5,1,1);	
-  // glTranslatef(0,-5,-1);
-   
-//torus(10,40);
-   //glClipPlane(GL_CLIP_PLANE0,cutplane);
-     //glColor3f(1.0f, 1.0f, 1.0f);
-   
-   // glEnable(GL_CLIP_PLANE0);
-    //glTranslatef(0.0f, 0.0f, 1);
-    //gluSphere(quadratic2, 2, 20, 5);
-    
-    glutSolidTorus(0.7, 0.15, 10,20);
-    //glScalef(0.1,0.1,0.1);
-      //glutSolidTorus(0.2, 0.1, 10,20);,g
-      glColor3f(1.0f,1.0f,1.0f);
-      glTranslatef(0,1.613,0.080);
-      glScalef(0.1,0.2,0.1);
-      //glRotatef(90,1,0,0);
-      //glRotatef(4,0,1,0);
-      //gluDisk(quadratic,  0., 0.13, 30, 1);
-      //glutSolidCube(0.3);
-      glPopMatrix();
-      glPushMatrix();
-      
-      glPopMatrix();
-      
-      glPushMatrix();
-       glColor3f(1.0f,1.0f,0.0f);
-       glTranslatef(0,0,0);
-       //glScalef(1,1,1);
-       glTranslatef(0.24,1.54,-0.1);
-    gluCylinder(quadratic,0.01f,0.01f,0.2f,20,3);
-     glTranslatef(-0.50,0,-0);
-    gluCylinder(quadratic,0.01f,0.01f,0.2f,20,3);
-	//glPopMatrix();
+	 //Desenha os eixos e a base deles
+	  
 	 glPushMatrix();
+    glColor3f(0.6f,0.5f,0.2f);
+    
+    //Desenha base 1 e 2   
+    glPushMatrix();
+    glTranslatef(0.61,0,-0.103);
+    gluCylinder(quadratic,0.03f,0.06f,0.1f,20,3);
+    glTranslatef(-1.41,0,0);
+    gluCylinder(quadratic,0.03f,0.06f,0.1f,20,3);
+    glPopMatrix();
+	
+	 //Desenha eixos 1 e 2	
+	 glColor3f(1.0f,1.0f,0.f);
+    glTranslatef(0,0,0);
+	 glRotatef(90,1,0,0);	 
+    glTranslatef(0.61,-0.15,-1.15);
+    gluCylinder(quadratic,0.08f,0.1f,2.25f,20,3);
+    glTranslatef(-1.41,0,0);
+    gluCylinder(quadratic,0.08f,0.1f,2.25f,20,3);
+         
+    //Desenha as rodas conforme a sua rotacao    	
+    glPushMatrix();
 	 glColor3f(1.0f,0.0f,1.0f);
 	 glTranslatef(0,0,0);
-	 glScalef(0.1,0.1,0.1);
-	  glRotatef(90,1,0,0);
-	 glTranslatef(5,2,0);
+	 glScalef(0.7,0.7,0.7);
+	 glRotatef(270,1,0,0);
+	 glTranslatef(0,-0.11,0);
+	 
+	 //Desenha roda 1
 	 glPushMatrix();
-	glRotatef(alpha+=VELOCIDADE_SKATE,0,1,0);
-	 drawHalfSphere(10,10,0.2);
+	 glTranslatef(0,0,0);
+	 if(!flag)
+		glRotatef(alpha-=VELOCIDADE_SKATE,0,1,0);
+	 else glRotatef(alpha+=VELOCIDADE_SKATE,0,1,0);
+	 DesenhaMetadeEsfera(10,10,0.2);
 	 glPopMatrix();
 	 
-	 glTranslatef(-5,0,0);
+	 //Desenha roda 2
+	 glTranslatef(2.01,0,0);
 	 glPushMatrix();
-	 glRotatef(alpha+=VELOCIDADE_SKATE,0,1,0);
-	 drawHalfSphere(10,10,0.2);
+	 glTranslatef(0,0,0);
+	 if(!flag)
+	 	glRotatef(alpha-=VELOCIDADE_SKATE,0,1,0);
+	 else glRotatef(alpha+=VELOCIDADE_SKATE,0,1,0);
+	 DesenhaMetadeEsfera(10,10,0.2);
 	 glPopMatrix();
-	  
-	  glTranslatef(0,-2,0);
+	 	
+	 glTranslatef(0,-3,0);
 	 glRotatef(180,1,0,0);
 	 
+	 //Desenha roda 3
 	 glPushMatrix();
-	 glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
-	 drawHalfSphere(10,10,0.2);
+	 glTranslatef(0,0,0);
+	 if(!flag)
+	   glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
+	 else glRotatef(alpha2-=VELOCIDADE_SKATE,0,1,0);
+	 DesenhaMetadeEsfera(10,10,0.2);
 	 glPopMatrix();
 	
-	glTranslatef(5,0,0);
+	 //Desenha roda 4
+	 glTranslatef(-2.01,0,0);
+	 glPushMatrix();
+	 glTranslatef(0,0,0);
+	 if(!flag)
+	  glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
+	 else glRotatef(alpha2-=VELOCIDADE_SKATE,0,1,0);
+	 DesenhaMetadeEsfera(10,10,0.2);
+	 glPopMatrix();
+	 	
+	 glPopMatrix();
+    glPopMatrix();
+
+}
+
+
+
+/**
+ * @function OlharPara
+ *
+ * A função controla o deslocamento da camera conforme os eventos do teclado.
+ * 
+ **/ 
+void OlharPara(){
+	glLoadIdentity();
+ 	gluLookAt(x, y+CHANGE_CAMERA, z,x + Deltax,y + Deltay,z + Deltaz,0.0f,1.0f,0.0f);
+
+
+
+}
+
+
+/**
+ * @function CorrigirCamera
+ *
+ * @param float angulo - ângulo atual.
+ * A função é responsável por corrigir o movimento da câmera, caso for necessário. As
+ * coordenadas são corrigidas conforme o ângulo atual, calculando as direções no plano xyz;
+ * 
+ * 
+ **/ 
+void CorrigirCamera(float angulo) {
+
+
+ Deltax = sin(angulo);
+ Deltaz = -cos(angulo);
+ OlharPara();
+ 
+}
+
+
+/**
+ * @function MovimentarCamera
+ *
+ * @param int i - Valor da variação (intervalo de [-1,1] inclusive.)
+ * A função é responsável por aplicar o movimento da câmera, no eixo x e z.
+ * Também é possível controlar a velocidade da câmera através da constante
+ * CAM_VELOCIDADE. 
+ * 
+ * 
+ **/ 
+
+void MovimentarCamera(int i) {
+ x = x + i*(Deltax)*CAM_VELOCIDADE;
+ z = z + i*(Deltaz)*CAM_VELOCIDADE;
+ OlharPara();
+}
+
+
+/**
+ * @function Desenha
+ *
+ * 
+ * Função de callback responsável por desenhar todos os objetos da aplicação.
+ * Nela, são gerenciados os fatores da câmera, e renderizados o "chão", a esfera
+ * externa simulada como "céu" e também os demais objetos. Nesta mesma função,
+ * é renderizado as iluminações do sol e do ambiente em relação aos objetos.
+ * 
+ **/ 
+
+void Desenha(void) {
+ 
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ 	
+ 	if (delta2){
+		MovimentarCamera(delta2);
+	}
+	if (delta) {
+		angulo += delta;
+		CorrigirCamera(angulo);
+	}
+	//Desenha o ceu (esfera com textura)
 	glPushMatrix();
-	glRotatef(alpha2+=VELOCIDADE_SKATE,0,1,0);
-	 drawHalfSphere(10,10,0.2);
-	  glPopMatrix();
-    //glDisable(GL_CLIP_PLANE0);
-	
-	//cubo();
-glPopMatrix();
+	glTranslatef(0,-3,0);
+ 	glRotatef(90,0,0,1);
+ 	glRotatef(SKY_ROTATE+=0.1,1,0,0);
+ 	glEnable(GL_TEXTURE_2D);
+  	glColor3f(0.196078f, 0.6f, 0.8f);
+ 
+ 
+  	//GLUquadricObj * esfera = NULL;
+  	//esfera = gluNewQuadric();
+   gluQuadricTexture(quadratic,1);
+	gluSphere(quadratic,36,20,20);
+ 	glDisable(GL_TEXTURE_2D);
+ 	glColor3f(1.0,0.7,0.1);
+ 	glMaterialfv(GL_FRONT, GL_SPECULAR, especularidade2);
+ 	glMateriali(GL_FRONT, GL_SHININESS, especMaterial2);
 
-}
-
-void drawSnowMan() {
-
-
- glColor3f(1.0f, 1.0f, 1.0f);
-
-// Draw Body 
- glTranslatef(0.0f ,0.75f, 0.0f);
- glutSolidSphere(0.75f,20,20);
-
-
-// Draw Head
- glTranslatef(0.0f, 1.0f, 0.0f);
- glutSolidSphere(0.25f,20,20);
-
-// Draw Eyes
- glPushMatrix();
- glColor3f(0.0f,0.0f,0.0f);
- glTranslatef(0.05f, 0.10f, 0.18f);
- glutSolidSphere(0.05f,10,10);
- glTranslatef(-0.1f, 0.0f, 0.0f);
- glutSolidSphere(0.05f,10,10);
- glPopMatrix();
-
-// Draw Nose
- glColor3f(1.0f, 0.5f , 0.5f);
- glRotatef(0.0f,1.0f, 0.0f, 0.0f);
- glutSolidCone(0.08f,0.5f,10,2);
-}
-
-
-GLuint createDL() {
- GLuint snowManDL;
-
- // Create the id for the list
- snowManDL = glGenLists(2);
-
- glNewList(snowManDL+1,GL_COMPILE);
-  drawSnowMan();
- glEndList();
- // start list
- glNewList(snowManDL,GL_COMPILE);
-
- // call the function that contains the rendering commands
- for(int i = -3; i < 3; i++)
-  for(int j=-3; j < 3; j++) {
+	// Ativa o uso da luz ambiente
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente2);
+ 	glEnable(GL_LIGHT0);
+      
+   //Desenha o Sol e atribui a iluminacao 
+   glTranslatef(25,25,0); 
+ 	glutSolidSphere(4,30,30);
+ 	glDisable(GL_LIGHT0);
+ 	glPopMatrix();
+ 	glColor3f(0.9f, 0.9f, 0.9f);
+	 	
+	//Desenha o chao do cenario 	
+ 	glBegin(GL_QUADS);
+  	glVertex3f(-35.0f, 0.0f, -35.0f);
+  	glVertex3f(-35.0f, 0.0f,  35.0f);
+  	glVertex3f( 35.0f, 0.0f,  35.0f);
+  	glVertex3f( 35.0f, 0.0f, -35.0f);
+ 	glEnd();
+   
+   //Controle para Renderizacao dos objetivos como animacao
+	if (passo4 >= 300) {
+   	dir4 = dir4 == 0 ? 1 : 0;
+   	passo4 = 0;
+   }
+   passo4++;
    glPushMatrix();
-   glTranslatef(i*10.0,0,j * 10.0);
-   glCallList(snowManDL+1);
-   glPopMatrix();
-  }
-
- // endList
- glEndList();
-
- return(snowManDL);
+   if (dir4 == 0){
+      glTranslatef(objPos-0.0001,0,0);
+  	}
+   else{
+      glTranslatef(0.0001+objPos,0,0);
+   }
+  
+  	glPushMatrix();
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glTranslatef(0,1.0,0);
+	glScalef(0.5,0.5,0.5);
+  	
+  	//Desenha o Android
+	glRotatef(-90,1,0,0);
+	glRotatef(180,0,0,1);
+	glPushMatrix();
+	glTranslatef(0,0,0.1);
+	Android();
+	glPopMatrix();
+ 			
+ 	//Desenha o Skate
+ 	glTranslatef(0,0,-1.7);
+	glScalef(1.4,0.6,1);
+   glColor3f(1.0f, 0.0f, 0.0f);
+	Skate();
+  	glPopMatrix();
+  	glPopMatrix();
+   glFlush();
+   objPos += objDelta;
+   //Define os limites de deslocamento dos objetos
+	if (objPos >= 20 || objPos <= -20.0) {
+		objDelta = -objDelta;
+		if(!flag)flag = 1;
+		else flag = 0;
+	}
+	//Controle de Quadros por segundos da aplicacao
+   frame++;
+   time=glutGet(GLUT_ELAPSED_TIME);
+ 
+   if (time - base > 1000) {
+ 	   printf("FPS:%4.2f\n" , frame*1000.0/(time-base));
+      base = time;  
+      frame = 0;
+   }
+   glutSwapBuffers();
+   glFinish();
+ 
 }
 
-void initScene() {
+/**
+ * @function Inicializa
+ *
+ * 
+ * A função é responsável por inicializar as opções necessárias para a aplicação,
+ * tais como: definição do z-buffer, quadricas, textura do céu, e as duas fontes de 
+ * iluminação; as normais são calculadas pelo opengl. 
+ * 
+ * 
+ **/ 
 
- glEnable(GL_DEPTH_TEST);
- snowman_display_list = createDL();
-
-  unsigned int ih=320, iw=240;
-	//unsigned char * texture = NULL;
+void Inicializa() {
+	glEnable(GL_DEPTH_TEST);
+ 	quadratic = gluNewQuadric();
+ 	quadratic2 = gluNewQuadric();
+	
+	unsigned int ih=320, iw=240;
 	texture = loadBMP_custom("sky.bmp", iw, ih);
 	glShadeModel(GL_SMOOTH);
-//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	GLuint texnum[1];
+	
 	// Define a textura corrente
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, texnum);
@@ -545,15 +589,15 @@ void initScene() {
    
    glShadeModel(GL_SMOOTH);
    
-	// Define a reflet�ncia do material
+	// Define a refletancia do material
 	//glMaterialfv(GL_FRONT, GL_SPECULAR, especularidade);
-	// Define a concentra��o do brilho
+	// Define a concentracao do brilho
 	//glMateriali(GL_FRONT, GL_SHININESS, especMaterial);
 
 	// Ativa o uso da luz ambiente
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente1);
 
-	// Define os par�metros da luz de n�mero 0
+	// Define os parametros da luz de numero 0
 	glLightfv(GL_LIGHT1, GL_AMBIENT, luzAmbiente1);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, luzDifusa1);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, luzEspecular1);
@@ -564,295 +608,139 @@ void initScene() {
 	glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular2);
 	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz2);
 
-	// Habilita a defini��o da cor do material a partir da cor corrente
+	// Habilita a definicao da cor do material a partir da cor corrente
 	glEnable(GL_COLOR_MATERIAL);
-	//Habilita o uso de ilumina��o
+	//Habilita o uso de iluminacao
 	glEnable(GL_LIGHTING);
-	// Habilita a luz de n�mero 0
+	// Habilita a luz de numero 0
 	glEnable(GL_LIGHT1);
 	glEnable(GL_NORMALIZE);
 
 }
 
-void orientMe(float ang) {
+/**
+ * @function Teclado
+ *
+ * @param unsigned char key - Obter a tecla apertada do teclado
+ * @param int x - coordenada x
+ * @param int y - coordenada y
+ *
+ * A função é responsável por: caso for pressionada a tecla 'esc', então
+ * a aplicação é finalizada, caso for pressionado 'w', a câmera é deslocada
+ * para cima, e caso for 's', a câmera é deslocada para baixo. 
+ * 
+ * 
+ **/ 
 
+void Teclado(unsigned char key, int x, int y) {
 
- lx = sin(ang);
- lz = -cos(ang);
- glLoadIdentity();
- gluLookAt(x, y+CHANGE_CAMERA, z,
-       x + lx,y + ly,z + lz,
-    0.0f,1.0f,0.0f);
-}
-
-
-void moveMeFlat(int i) {
- x = x + i*(lx)*0.1;
- z = z + i*(lz)*0.1;
- glLoadIdentity();
- gluLookAt(x, y+CHANGE_CAMERA, z,
-       x + lx,y + ly,z + lz,
-    0.0f,1.0f,0.0f);
-}
-
-void setOrthographicProjection() {
-
- // switch to projection mode
- glMatrixMode(GL_PROJECTION);
- // save previous matrix which contains the
- //settings for the perspective projection
- glPushMatrix();
- // reset matrix
- glLoadIdentity();
- // set a 2D orthographic projection
- gluOrtho2D(0, w, 0, h);
- // invert the y axis, down is positive
- glScalef(1, -1, 1);
- // mover the origin from the bottom left corner
- // to the upper left corner
- glTranslatef(0, -h, 0);
- glMatrixMode(GL_MODELVIEW);
-}
-
-void resetPerspectiveProjection() {
- // set the current matrix to GL_PROJECTION
- glMatrixMode(GL_PROJECTION);
- // restore previous settings
- glPopMatrix();
- // get back to GL_MODELVIEW matrix
- glMatrixMode(GL_MODELVIEW);
-}
- 
-void renderBitmapString(float x, float y, void *font,char *string)
-{
-
-  char *c;
-  // set position to start drawing fonts
-  glRasterPos2f(x, y);
-  // loop all the characters in the string
-  for (c=string; *c != '\0'; c++) {
-    glutBitmapCharacter(font, *c);
-  }
-}
-
-void renderScene(void) {
- //glutTimerFunc(10000,Redesenha,12);
- 
- //printf("%d\n", deltaMove);
-	if (deltaMove){
-		moveMeFlat(deltaMove);
-	
-	}
-	if (deltaAngle) {
-		angle += deltaAngle;
-		orientMe(angle);
-	}
-	
-
+ if (key == 27)exit(0);
   
-
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-// Draw ground
- //Desenha o Chao
- glPushMatrix();
- glTranslatef(0,-3,0);
- glRotatef(90,0,0,1);
- glRotatef(skyRotate+=0.1,1,0,0);
- glEnable(GL_TEXTURE_2D);
-  glColor3f(0.196078f, 0.6f, 0.8f);
- //glutSolidSphere(36.f,10,10);
- 
-  GLUquadricObj * esfera = NULL;
-  esfera = gluNewQuadric();
-    gluQuadricTexture(esfera,1);
-
-    
-    gluSphere(esfera,36,20,20);
- glDisable(GL_TEXTURE_2D);
- glColor3f(1.0,0.7,0.1);
- glMaterialfv(GL_FRONT, GL_SPECULAR, especularidade2);
- glMateriali(GL_FRONT, GL_SHININESS, especMaterial2);
-
-	// Ativa o uso da luz ambiente
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente2);
- glEnable(GL_LIGHT0);
- 
- glTranslatef(25,25,0); 
- glutSolidSphere(4,30,30);
- glDisable(GL_LIGHT0);
- glPopMatrix();
- glColor3f(0.9f, 0.9f, 0.9f);
- glBegin(GL_QUADS);
-  glVertex3f(-35.0f, 0.0f, -35.0f);
-  glVertex3f(-35.0f, 0.0f,  35.0f);
-  glVertex3f( 35.0f, 0.0f,  35.0f);
-  glVertex3f( 35.0f, 0.0f, -35.0f);
- glEnd();
-
-
-  
-    if (passo4 >= 300) {
-        dir4 = dir4 == 0 ? 1 : 0;
-        passo4 = 0;
-    }
-    passo4++;//glutTimerFunc(10000,Redesenha,12);
-    glPushMatrix();
-    //glutTimerFunc(10000,Redesenha,1);
-    if (dir4 == 0){
-      glTranslatef(gfPosX-0.0001,0,0);
-      
-      //printf("%d\n",passo4);
-  }
-     else{
-        glTranslatef(0.0001+gfPosX,0,0);
-        
-	}
-   //glTranslatef(10,0,0);
-  glPushMatrix();
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glTranslatef(0,1.0,0);
-	glScalef(0.5,0.5,0.5);
-  
-	glRotatef(-90,1,0,0);
-	glRotatef(180,0,0,1);
-	glPushMatrix();
-	glTranslatef(0,0,0.1);
-	drawAndroid();
-	glPopMatrix();
- 
-	//glTranslatef(0,0,-7.6);
-	glTranslatef(0,0,-1.7);
-	//glRotatef(90,1,0,0);
-	glScalef(1.4,0.6,1);
-   
-	glColor3f(1.0f, 0.0f, 0.0f);
-	//drawSkate();
-	skate2();
-  glPopMatrix();
-  glPopMatrix();
- //glPopMatrix();
- glFlush();
- gfPosX += gfDeltaX;
-	if (gfPosX >= 20 || gfPosX <= -20.0) {
-		gfDeltaX = -gfDeltaX;
-		if(!flag)
-			flag = 1;
-		else flag = 0;
-		//alpha = alpha+360;
-      // alpha2 = -alpha2; 
-	}
- //glTranslatef(0,0,0);
- 
- //glTranslatef(0,0,apha+=0.1);
- //glRotatef(alpha+=0.4,1,0,0);
- //drawSnowMan();
- frame++;
- time=glutGet(GLUT_ELAPSED_TIME);
- if (time - timebase > 1000) {
-  sprintf(s,"FPS:%4.2f",frame*1000.0/(time-timebase));
-  timebase = time;  
-  frame = 0;
- }
-
- /*glColor3f(0.0f,1.0f,1.0f);
- setOrthographicProjection();
- glPushMatrix();
- glLoadIdentity();
- renderBitmapString(30,15,(void *)font,"GLUT Tutorial @ 3D Tech");
- renderBitmapString(30,35,(void *)font,s);
- renderBitmapString(30,55,(void *)font,"Esc - Quit");
- glPopMatrix();*/
- //resetPerspectiveProjection();
-
- glutSwapBuffers();
- glFinish();
- 
-}
-
-void processNormalKeys(unsigned char key, int x, int y) {
-
- if (key == 27)
-  exit(0);
-  
-  if(key == 'w'){
-  		CHANGE_CAMERA = CHANGE_CAMERA + 0.5; 
+  if(key == 119){
+  		CHANGE_CAMERA += DESLOCAMENTO_VISAO; 
 	 	//if(CHANGE_CAMERA > 20)flag = 1;
 	}
-  else if(key = 's'){
-	CHANGE_CAMERA = CHANGE_CAMERA - 0.5;
+  else if(key = 115){
+	CHANGE_CAMERA -= DESLOCAMENTO_VISAO;
 		//if(CHANGE_CAMERA < -10) flag =0;	
 	
 	}
 	printf("Ponto de visao:%f\n", CHANGE_CAMERA);
 }
 
-void pressKey(int key, int x, int y) {
+/**
+ * @function RotacionaCamera
+ *
+ * @param unsigned char key - Obter a tecla apertada do teclado
+ * @param int x - coordenada x
+ * @param int y - coordenada y
+ *
+ * A função é responsável pelo controle das direções da câmera conforme o evento
+ * de teclado, nesta função as teclas: UP,DOWN,LEFT e RIGHT são gerenciados para
+ * o controle da câmera, de modo que a mesma será direcionada conforme a respectiva
+ * tecla seja pressionada.
+ * 
+ * 
+ **/ 
+
+void RotacionaCamera(int key, int x, int y) {
  
- switch (key) {
-  case GLUT_KEY_LEFT : deltaAngle = -0.01f;break;
-  case GLUT_KEY_RIGHT : deltaAngle = 0.01f;break;
-  case GLUT_KEY_UP : deltaMove = 1;break;
-  case GLUT_KEY_DOWN : deltaMove = -1;break;
-  
-  
- }
+	switch (key) {
+  		case GLUT_KEY_LEFT : delta = -0.05f;break;
+  		case GLUT_KEY_RIGHT : delta = 0.05f;break;
+  		case GLUT_KEY_UP : delta2 = 1;break;
+  		case GLUT_KEY_DOWN : delta2 = -1;break;
+  	}
 
 }
 
-void releaseKey(int key, int x, int y) {
+/**
+ * @function ParaRotacaoCamera
+ *
+ * @param unsigned char key - Obter a tecla apertada do teclado
+ * @param int x - coordenada x
+ * @param int y - coordenada y
+ *
+ * Esta função é necessária para a correção do movimento da câmera, isto é,
+ * quando uma tecla direcional é pressionada, ela permanece "pressionada", então
+ * esta função faz com que a mesma seja definida como  'zero'.
+ * 
+ **/ 
 
- switch (key) {
-  case GLUT_KEY_LEFT : if (deltaAngle < 0.0f)
-        deltaAngle = 0.0f;
-       break;
-  case GLUT_KEY_RIGHT : if (deltaAngle > 0.0f)
-        deltaAngle = 0.0f;
-       break;
-  case GLUT_KEY_UP : if (deltaMove > 0)
-        deltaMove = 0;
-       break;
-  case GLUT_KEY_DOWN : if (deltaMove < 0)
-        deltaMove = 0;
-       break;
- }
+void ParaRotacaoCamera(int key, int x, int y) {
+
+	switch (key) {
+  		case GLUT_KEY_LEFT : if (delta < 0.0f)delta = 0.0f; break;
+  		case GLUT_KEY_RIGHT : if (delta > 0.0f)delta = 0.0f;break;
+  		case GLUT_KEY_UP : if (delta2 > 0) delta2 = 0; break;
+  		case GLUT_KEY_DOWN : if (delta2 < 0)delta2 = 0;break;
+ 	}
 }
 
-void idle(){
-	if(!CHANGE_CAMERA){
-	gluLookAt(x, 10, 15,
-				0,0,0,
-				0.0f,1.0f,0.0f);
-}
-    glutPostRedisplay();
-	}
-void initWindow() {
- glutIgnoreKeyRepeat(1);
- glutKeyboardFunc(processNormalKeys);
- glutSpecialFunc(pressKey);
- glutSpecialUpFunc(releaseKey);
- glutDisplayFunc(renderScene);
- glutIdleFunc(renderScene);
- glutReshapeFunc(changeSize);
- quadratic = gluNewQuadric();
- quadratic2 = gluNewQuadric();
- initScene();
+/**
+ * @function AlteraTamanhoJanela
+ *
+ * @param GLsizei w - define a largura;
+ * @param GLsizei h - define a altura.
+ *
+ * A função define a rotina para o redimensionar a tela.
+ *
+ **/
+
+void AlteraTamanhoJanela(GLsizei w, GLsizei h){
+
+
+ if(h == 0) h = 1;
+ 
+ AspRatio = (float)w / (float)h;
+
+ glMatrixMode(GL_PROJECTION);
+ glLoadIdentity();
+ 
+ glViewport(0, 0, w, h);
+
+ gluPerspective(45,AspRatio,0.4,500);
+ glMatrixMode(GL_MODELVIEW);
+ OlharPara();
 
 }
-
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
  glutInit(&argc, argv);
- glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
- glutInitWindowPosition(100,100);
- glutInitWindowSize(640,360);
- glutCreateWindow("sniow");
- //glutTimerFunc(4000,Redesenha,2);
+ glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB);
+ glutInitWindowSize(600,300);
+ glutCreateWindow("Android Robot");
+ glutDisplayFunc(Desenha);
+ glutReshapeFunc(AlteraTamanhoJanela);
+ 
+ glutKeyboardFunc(Teclado);
+ glutSpecialFunc(RotacionaCamera);
+ glutSpecialUpFunc(ParaRotacaoCamera);
+ 
+ glutIdleFunc(Desenha);
+ Inicializa();
 
- // register all callbacks
- initWindow();
 
  glutMainLoop();
 
- return(0);
+
 }

@@ -1,20 +1,23 @@
 #   Universidade Federal da Fronteira Sul
 # 
-#                TRABALHO II
+#                TRABALHO I
 #   
-#	Disciplina: Computação gráfica
+#   Disciplina: Computação gráfica
 #   Professor: José Carlos Bins Filho
 #    
-#   Renderização da Bandeira da Netherlands(Holanda) 
+#   Renderização do Android andando de Skate 
 # 	
 #
-#   Alunos : Edson Lemes da Silva & Lucas Cezar Parnoff
+#   Aluno : Edson Lemes da Silva
 #
 #
 #  --- MAKEFILE DE COMPILAÇÃO E EXECUÇAO ---
-all: flag
+all: android
 
-flag: *.cpp
+android: *.cpp
 	g++ snow.cpp bmp.cpp android.h  -o  main -lGL -lGLU -lglut
 	./main
-   
+
+
+clean:
+	rm main   

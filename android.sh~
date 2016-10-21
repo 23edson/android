@@ -1,0 +1,2 @@
+#!/bin/bash
+g++ android.cpp bmp.cpp android.h  -o  m -lGL -lGLU -lglut && ./m

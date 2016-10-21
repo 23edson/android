@@ -1,3 +1,4 @@
+//Biblioteca para leitura de arquivo .bmp
 #include <stdio.h>
 
 
