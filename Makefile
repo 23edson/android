@@ -15,7 +15,7 @@
 all: android
 
 android: *.cpp
-	g++ snow.cpp bmp.cpp android.h  -o  main -lGL -lGLU -lglut
+	g++ android.cpp bmp.cpp android.h  -o  main -lGL -lGLU -lglut
 	./main
 
 

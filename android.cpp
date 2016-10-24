@@ -12,7 +12,7 @@
 *   
 *   As funções a seguir fazem a renderização do android andando de skate, 
 *   a textura utilizada para o céu está no arquivo 'sky.bmp', a leitura é feito
-*   dentro da funçao Inicializar().
+*   dentro da função Inicializar().
 * 	 
 *
 *
@@ -25,7 +25,7 @@
  * @function MudarLuz
  *
  * 
- * A função define a rotina para definir luz no material.
+ * A função define a rotina para inicializar luz no material.
  *
  **/
 
@@ -116,9 +116,9 @@ void DesenhaMembro(){
  * A função renderiza o boneco Android, também já simula o movimento
  * dos braços e das antenas. A iluminação do material também é realizada
  * na rotina. Os objetos utilizados para desenhar o boneco, são implementados
- * no opengl, tais como: Disco, esfera e cilíndro. O corpo do Android é representado 
+ * no opengl, tais como: Disco, esfera e cilindro. O corpo do Android é representado 
  * por um cilindro "tampados" com dois discos em seus extremos, a cabeça é representada
- * por uma semi-esfera(é desenhada a esfera, então é cortada ao meio). As antenas são 
+ * por uma semi-esfera(esfera 'cortada' ao meio). As antenas são 
  * cilindros no alto da cabeça, os olhos são esferas pretas. E os membros do Android,
  * são cilindros "tampados" com das esferas nos seus extremos.
  *
@@ -280,10 +280,10 @@ void Android(){
  * 
  *
  * A função é responsável pela renderização do Skate, utilizando-se 
- * os objetos definitos no opengl, como : Disco, cilíndro. E também a função
+ * os objetos definitos no opengl, como : Disco, cilindro. E também a função
  * que renderiza metade de uma esfera (para as rodas). A prancha do Skate é renderizada
  * através de vários discos desenhados com deslocamento de 0.0001 cada disco. A base do eixo
- * e o eixo é representado por cilindros, e por último as rodas são simulados por metade de 
+ * e o eixo são representados por cilindros, e por último as rodas são simuladas por metade de 
  * esferas já aplicando as rotações e também a luz em todo o Skate. 
  **/ 
 void Skate(){
@@ -724,6 +724,19 @@ void AlteraTamanhoJanela(GLsizei w, GLsizei h){
  OlharPara();
 
 }
+
+/**
+ * @function idle
+ *
+ *
+ * A função define a rotina para atualizar a posição da câmera
+ * quando necessário.
+ *
+ **/
+void idle(void){
+	glutPostRedisplay();
+	OlharPara();
+}
 //Inicializa o opengl
 int main(int argc, char **argv){
  glutInit(&argc, argv);
@@ -737,7 +750,7 @@ int main(int argc, char **argv){
  glutSpecialFunc(RotacionaCamera);
  glutSpecialUpFunc(ParaRotacaoCamera);
  
- glutIdleFunc(Desenha);
+ glutIdleFunc(idle);
  Inicializa();
 
 
