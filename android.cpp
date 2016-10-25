@@ -12,8 +12,8 @@
 *   
 *   As funções a seguir fazem a renderização do android andando de skate, 
 *   a textura utilizada para o céu está no arquivo 'sky.bmp', a leitura é feito
-*   dentro da função Inicializar().
-* 	 
+*   dentro da função Inicializar(). A imagem 'sky.bmp' foi retirada da Internet.
+* 	
 *
 *
 **/
@@ -640,7 +640,7 @@ void Teclado(unsigned char key, int x, int y) {
   		CHANGE_CAMERA += DESLOCAMENTO_VISAO; 
 	 	//if(CHANGE_CAMERA > 20)flag = 1;
 	}
-  else if(key = 115){
+  else if(key == 115){
 	CHANGE_CAMERA -= DESLOCAMENTO_VISAO;
 		//if(CHANGE_CAMERA < -10) flag =0;	
 	
