@@ -26,7 +26,7 @@ a tecla 'ESC' pode ser utilizada para o encerramento do programa.
 a tecla 'w' muda a visão da câmera para cima;
 a tecla 's'  muda a visão da câmera para baixo;
 as teclas direcionais : UP, DOWN, LEFT e RIGHT podem ser usadas para
-controlas  a livre movimentação da câmera no cenário. 
+controlar a livre movimentação da câmera no cenário. 
 
 Inicialmente, o ponto de visão é definido como : 0.0, assim ao apertar 'w', o
 ponto de visão é incrementado, e ao apertar 's', o ponto é decrementado. A cada
