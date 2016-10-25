@@ -33,3 +33,7 @@ ponto de visão é incrementado, e ao apertar 's', o ponto é decrementado. A ca
 evento de teclado destas duas teclas, o ponto de visão atual é mostrado no terminal.
 
 No terminal, também é impresso a quantidade de quadros por segundo da aplicação.
+
+*Obs: O movimento dos braços do boneco é irregular, isto é, um braço
+movimento mais que o outro. A intenção disso é fazer com que os movimentos
+se tornem o mínimo real possível. 
